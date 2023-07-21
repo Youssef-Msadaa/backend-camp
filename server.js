@@ -17,8 +17,10 @@ app.use("/getimage", express.static("./uploads"));
 //Routes
 const campPlaceRout = require("./routes/campPlace");
 const tentRout = require("./routes/tent");
+const UserRout = require("./routes/user");
 app.use("/campRout", campPlaceRout);
 app.use("/tentRout", tentRout);
+app.use("/user", UserRout);
 
 app.listen(3000, () => {
   console.log("server work successufully in port 3000");
