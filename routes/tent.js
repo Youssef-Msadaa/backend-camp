@@ -2,10 +2,47 @@ const express = require("express");
 
 const app = express();
 app.use(express.json());
-
+const jwt = require("jsonwebtoken");
 const tentModel = require("../models/tent");
 const multer = require("multer");
 const router = express.Router();
+
+//Generate Secret Key
+
+const privateKey = "29244410";
+const publicKey = "Key";
+
+//verify Token
+
+verifyToken = (req, res, next) => {
+  let token = req.headers.authorization;
+  if (!token) {
+    res.status(400).json({ msg: "access rejected .......!!!!!" });
+  }
+  try {
+    jwt.verify(token, privateKey);
+    next();
+  } catch (e) {
+    res.status(400).json({ msg: e });
+  }
+};
+
+//Verify Token Admin
+verifyTokenAdmin = (req, res, next) => {
+  let token = req.headers.authorization;
+  let role = req.headers.role;
+  if (!token || role != "admin") {
+    res.status(400).json({ msg: "access rejected .......!!!!!" });
+  }
+  try {
+    jwt.verify(token, privateKey);
+    next();
+  } catch (e) {
+    res.status(400).json({ msg: e });
+  }
+};
+
+//Crud Operations
 
 let filename = "";
 const myStorage = multer.diskStorage({

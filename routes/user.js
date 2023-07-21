@@ -6,7 +6,42 @@ app.use(express.json());
 
 const UserModel = require("../models/user");
 
+//Generate Secret Key
+const privateKey = "29244410";
+const publicKey = "Key";
 const router = express.Router();
+
+//verify Token
+
+verifyToken = (req, res, next) => {
+  let token = req.headers.authorization;
+  if (!token) {
+    res.status(400).json({ msg: "access rejected .......!!!!!" });
+  }
+  try {
+    jwt.verify(token, privateKey);
+    next();
+  } catch (e) {
+    res.status(400).json({ msg: e });
+  }
+};
+
+//Verify Token Admin
+verifyTokenAdmin = (req, res, next) => {
+  let token = req.headers.authorization;
+  let role = req.headers.role;
+  if (!token || role != "admin") {
+    res.status(400).json({ msg: "access rejected .......!!!!!" });
+  }
+  try {
+    jwt.verify(token, privateKey);
+    next();
+  } catch (e) {
+    res.status(400).json({ msg: e });
+  }
+};
+
+//Crud Operations
 
 router.get("/all", (req, res) => {
   UserModel.find({})
@@ -86,4 +121,5 @@ router.put("/update/:id", (req, res) => {
       res.status(400).send(err);
     });
 });
+
 module.exports = router;
