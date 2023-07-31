@@ -65,12 +65,13 @@ router.get("/getbyid/:id", (req, res) => {
 
 router.post("/register", (req, res) => {
   let data = req.body;
+  console.log("user", req);
   let User = new UserModel(data);
   let salt = bcrypt.genSaltSync(10);
   User.password = bcrypt.hashSync(data.password, salt);
   User.save()
     .then((savedUser) => {
-      res.status(200).send(savedUser);
+      res.status(200).send(true);
     })
     .catch((err) => {
       res.status(400).send(err);
